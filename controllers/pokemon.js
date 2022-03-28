@@ -18,3 +18,14 @@ export const deletePokemon = (req, res) => {
   const mon = mon.filer((user) => user.id != id);
   res.send(`${mon.name} deleted from the database`);
 };
+export const patchPokemon = (req, res) => {
+  const { id } = req.params;
+  const { name, type1, type2, number } = req.body;
+  const user = mon.find((pokemon) => pokemon.id === id);
+  if (name) pokemon.name = name;
+  if (type1) pokemon.type1 = type1;
+  if (type2) pokemon.type2 = type2;
+  if (number) pokemon.number = number;
+
+  res.send(`${mon.name} has been patched`);
+};
