@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 });
 const CONNECTION_URL =
   "mongodb+srv://spish:Lordspish69@cluster0.wdrxo.mongodb.net/pokemon?retryWrites=true&w=majority";
-const PORT = 5002;
+const PORT = "https://nickspisak-pokemon-api.herokuapp.com/";
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
