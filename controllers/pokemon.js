@@ -1,31 +1,54 @@
 import { v4 as uuidv4 } from "uuid";
-let pokemon = [];
-export const getPokemon = (req, res) => {
-  res.send(pokemon);
+import mongoose from "mongoose";
+import PostPokemon from "../models/pokemon";
+export const getPokemon = async (req, res) => {
+  try {
+    const postPokemon = await PostPokemon.find();
+    res.status(200).json(postPokemon);
+  } catch (error) {
+    res.status(404).json(error)
+  }
 };
 export const createPokemon = (req, res) => {
   const mon = req.body;
-  pokemon.push({ ...mon, id: uuidv4() });
-  res.send(`[${mon.name}] added`);
+  const newPostPokemon = new PostPokemon({
+    ...mon, 
+    id: uuidv4(), 
+  })
+  try {
+    await newPostPokemon.save()
+    res.status(201).json(newPostPokemon)
+  } catch (error) {
+    res.status(409).json(error)
+  }
 };
-export const findPokemon = (req, res) => {
+export const findPokemon = async (req, res) => {
   const { id } = req.params;
-  const foundPokemon = find((mon) => mon.id === id);
-  res.send(foundPokemon);
+  try {
+    const mon = await PostPokemon.findById(id);
+    res.staut(200).json(mon)
+  } catch (error) {
+    res.status(404).json(error)
+  }
 };
 export const deletePokemon = (req, res) => {
   const { id } = req.params;
-  const mon = mon.filer((user) => user.id != id);
-  res.send(`${mon.name} deleted from the database`);
+  if (!mongoose.Types.ObjectId.isValid(id))
+  return res.status(404).send(`No pokemon with id: ${id}`);
+
+await PostPokemon.findByIdAndRemove(id);
+
+res.json({ message: "Pokemon deleted successfully." });
 };
 export const patchPokemon = (req, res) => {
   const { id } = req.params;
-  const { name, type1, type2, number } = req.body;
-  const user = mon.find((pokemon) => pokemon.id === id);
-  if (name) pokemon.name = name;
-  if (type1) pokemon.type1 = type1;
-  if (type2) pokemon.type2 = type2;
-  if (number) pokemon.number = number;
+  const { name, type1, type2, number, description, type } = req.body;
+  if (!mongoose.Types.ObjectId.isValid(id))
+    return res.status(404).send(`No pokemon with id: ${id}`);
 
-  res.send(`${mon.name} has been patched`);
+  const updatedPokemon = { name, type1, type2, description, type, number, _id: id };
+
+  await PostMessage.findByIdAndUpdate(id, updatedPokemon, { new: true });
+
+  res.json(updatedPokemon);
 };
