@@ -13,8 +13,9 @@ app.use("/pokemon", pokemonRoutes);
 app.get("/", (req, res) => {
   res.send("Hello");
 });
-const CONNECTION_URL = `${process.env.CONNECTION_URL}`;
-const PORT = `${process.env.PORT}`;
+const CONNECTION_URL =
+  "mongodb+srv://spish:Lordspish69@cluster0.wdrxo.mongodb.net/pokemon?retryWrites=true&w=majority";
+const PORT = 5002;
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() =>
